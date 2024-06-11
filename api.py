@@ -9,9 +9,9 @@ app = Flask(__name__)
 api = Blueprint('api', __name__)
 
 @app.route('/predict', methods=['POST']) # Placeholder URL route
-def prediction_api():
-    try:
-        text = request.form['text']
+def prediction_api(): # Get the text from the POST request
+    try:                            
+        text = request.form['text'] # placeholder ID for the text input
         sentiment = predict_sentiment(text)
         return jsonify({"sentiment": sentiment})
     except PreprocessingError as ppe:

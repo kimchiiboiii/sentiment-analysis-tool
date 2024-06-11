@@ -3,6 +3,12 @@ import tensorflow as tf
 from flask import jsonify
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
+# Backend component of the sentiment analysis
+# Loads the model and tokenizer, handles the 
+# preprocessing code/scripts, makes the prediction
+# using the model and interprets the prediction
+
+
 class PreprocessingError(Exception):
     # Custom exception class for preprocessing errors
     # Type errors and value errors with the input data etc.
@@ -45,7 +51,8 @@ def interpret_prediction(prediction):
     
 
 def predict_sentiment(text):
-    # Function that is callled by the API
+    # Makes the prediction
+    # Function that is called by the api
     try:
         preprocessed_text = preprocess_text(text)
         prediction = model.predict(preprocessed_text)
