@@ -35,7 +35,7 @@ def interpret_prediction(prediction):
     try:
         # Implement interpretation here
         # Control flow based on how the model scores sentiment
-        # e.g. if score > 0.5, positive statement, if score < 0.5, negative, etc.
+        # e.g. if score > 1.5, extremely positive, etc.
         sentiment = "positive" if prediction > 0.5 else "negative"
         return sentiment
     except TypeError as te:
