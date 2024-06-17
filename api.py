@@ -1,5 +1,6 @@
-from flask import Flask, Blueprint, request, jsonify, escape
 from sentiment_model import predict_sentiment, PreprocessingError, PredictionError
+from werkzeug.utils import escape
+from flask import Flask, Blueprint, request, jsonify
 import re
 
 app = Flask(__name__)
@@ -11,38 +12,19 @@ api = Blueprint('api', __name__)
 
 
 # Change the string in test_input to test out your data validation 
-test_input = "This is a test input"
+test_input = "This is a test string"
 
-
-# TODO: Data validation prototype function
-# Requirements: 
-# 1. Must not be a string
-# 2. String must not be blank
-# 3. String must be less than 2000 characters
-# 4. Validation must remove HTML/Javascript tags and special characters
 def validate_input(test): 
+    if len(test) > 2000:
+        return False, "String exceeds 2000 characters"
+    
+    test = re.sub(r'<.*?>', "", escape(test)) # Remove HTML/Javascript tags + Remove special characters (escape)
+    
     if not isinstance(test, str):
         return False, "Input is not a string"
-    # elif ...add more validation criteria here
-        
-
-
-
-
-validate_input(test_input) # Test the function
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    if not test.strip():
+        return False, "String is blank"
+    return True, "Input is valid", print(test)
 
 
 @app.route('/predict', methods=['POST']) # Placeholder URL route
