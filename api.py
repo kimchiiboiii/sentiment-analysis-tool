@@ -11,30 +11,29 @@ app = Flask(__name__)
 api = Blueprint('api', __name__)
 
 
-# Change the string in test_input to test out your data validation 
-test_input = "This is a test string"
+test_input = "This is a input string"
 
-def validate_input(test): 
-    if len(test) > 2000:
+def validate_input(input): 
+    if len(input) > 2000:
         return False, "String exceeds 2000 characters"
     
-    test = re.sub(r'<.*?>', "", escape(test)) # Remove HTML/Javascript tags + Remove special characters (escape)
-    
-    if not isinstance(test, str):
+    cleaned_input = re.sub(r'<.*?>', "", escape(input)) # Remove HTML/Javascript tags + Remove special characters
+    if not isinstance(input, str):
         return False, "Input is not a string"
-    if not test.strip():
+    if not input.strip():
         return False, "String is blank"
-    return True, "Input is valid", print(test)
+    return True, "Input is valid", cleaned_input
 
 
 @app.route('/predict', methods=['POST']) # Placeholder URL route
-# TODO: Implement data validation
-# Validation criteria (as of now): Text input is a string that isn't blank, 
-# and is less than 2000 characters. Feel free to add more validation criteria.
 def prediction_api(): # Get the text from the POST request
     try:                            
         text = request.form['text'] # placeholder ID for the text input
-        sentiment = predict_sentiment(text)
+        is_valid, message, cleaned_text = validate_input(text)
+        if not is_valid:
+            return jsonify({"error": message}), 400
+
+        sentiment = predict_sentiment(cleaned_text)
         return jsonify({"sentiment": sentiment})
     except PreprocessingError as ppe:
         return jsonify({"error": str(ppe)}), 400

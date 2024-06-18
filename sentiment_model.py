@@ -30,7 +30,7 @@ with open("path_to_tokenizer.pickle", "rb") as handle:
 def preprocess_text(text):
     try:
         # Implement preprocessing here
-        # Tokenize, pad, etc.
+        # Tokenize, pad, validate, etc.
         sequences = tokenizer.texts_to_sequences(text)
         preprocessed_text = pad_sequences(sequences, maxlen=100)
         return preprocessed_text
